@@ -214,19 +214,51 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Screenshots
 
-Key pages to capture (included in submission video/presentation):
+### Marketing Pages
 
-- Home (desktop & mobile)
-- Features
-- Pricing
-- App Dashboard
-- Customers
-- Customer Khata (ledger)
-- Transactions
-- Reports
-- Reminders
-- Settings
-- Login / Signup
+#### Home — Desktop
+![Home (desktop)](screenshots/home-desktop.png)
+
+#### Home — Mobile
+![Home (mobile)](screenshots/home-mobile.png)
+
+#### Features
+![Features](screenshots/features.png)
+
+#### Pricing
+![Pricing](screenshots/pricing.png)
+
+#### Login
+![Login](screenshots/login.png)
+
+#### Signup
+![Signup](screenshots/signup.png)
+
+### App Pages
+
+#### Dashboard — Desktop
+![Dashboard (desktop)](screenshots/dashboard.png)
+
+#### Dashboard — Mobile
+![Dashboard (mobile)](screenshots/dashboard-mobile.png)
+
+#### Customers
+![Customers](screenshots/customers.png)
+
+#### Customer Khata (Ledger)
+![Customer Khata](screenshots/customer-khata.png)
+
+#### Transactions
+![Transactions](screenshots/transactions.png)
+
+#### Reports
+![Reports](screenshots/reports.png)
+
+#### Reminders
+![Reminders](screenshots/reminders.png)
+
+#### Settings
+![Settings](screenshots/settings.png)
 
 ---
 
