@@ -6,9 +6,11 @@ import { Menu, X } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import Button from "@/components/ui/Button";
 import { marketingNav } from "@/lib/data";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 border-b-2 border-ink bg-white/95 backdrop-blur">
@@ -31,8 +33,8 @@ export default function Navbar() {
           <Button href="/auth/login" variant="ghost" size="sm">
             Log in
           </Button>
-          <Button href="/auth/signup" size="sm">
-            Get Started
+          <Button href={isAuthenticated ? "/app" : "/auth/signup"} size="sm">
+            {isAuthenticated ? "Dashboard" : "Get Started"}
           </Button>
         </div>
 
@@ -62,12 +64,20 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="mt-4 flex flex-col gap-3">
-            <Button href="/auth/login" variant="secondary" onClick={() => setOpen(false)}>
-              Log in
-            </Button>
-            <Button href="/auth/signup" onClick={() => setOpen(false)}>
-              Get Started
-            </Button>
+            {isAuthenticated ? (
+              <Button href="/app" onClick={() => setOpen(false)}>
+                Dashboard
+              </Button>
+            ) : (
+              <>
+                <Button href="/auth/login" variant="secondary" onClick={() => setOpen(false)}>
+                  Log in
+                </Button>
+                <Button href="/auth/signup" onClick={() => setOpen(false)}>
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </div>
       ) : null}

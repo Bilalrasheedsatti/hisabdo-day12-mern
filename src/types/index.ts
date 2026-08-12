@@ -1,5 +1,19 @@
 export type TransactionType = "credit" | "debit";
 
+export type ReminderMethod = "sms" | "whatsapp";
+export type ReminderStatus = "draft" | "scheduled" | "sent" | "delivered" | "failed";
+
+export interface Reminder {
+  id: string;
+  customerId: string;
+  amount: number;
+  method: ReminderMethod;
+  status: ReminderStatus;
+  scheduledDate: string;
+  note: string;
+  sentAt?: string | null;
+}
+
 export interface Transaction {
   id: string;
   customerId: string;

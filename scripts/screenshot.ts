@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 import path from "path";
 import fs from "fs";
 
+const baseUrl = process.env.SCREENSHOT_URL ?? "http://localhost:3000";
 const screenshotsDir = path.join(process.cwd(), "screenshots");
 if (!fs.existsSync(screenshotsDir)) {
   fs.mkdirSync(screenshotsDir, { recursive: true });
@@ -19,22 +20,34 @@ const pages = [
   { name: "login", url: "/auth/login", width: 1440, height: 900 },
   { name: "signup", url: "/auth/signup", width: 1440, height: 900 },
   { name: "transactions", url: "/app/transactions", width: 1440, height: 900 },
-  { name: "reports", url: "/app/reports", width: 1440, height: 900 },
   { name: "reminders", url: "/app/reminders", width: 1440, height: 900 },
+  { name: "reports", url: "/app/reports", width: 1440, height: 900 },
   { name: "settings", url: "/app/settings", width: 1440, height: 900 },
 ];
+
+const authUser = {
+  id: "u-demo",
+  name: "Bilal Traders",
+  business: "Bilal Traders",
+  phone: "0300-1234567",
+  avatar: "BT",
+};
 
 async function main() {
   const browser = await chromium.launch();
   const context = await browser.newContext();
 
+  await context.addInitScript((user) => {
+    localStorage.setItem("hisabdo.user", JSON.stringify(user));
+  }, authUser);
+
   for (const page of pages) {
     const pageInstance = await context.newPage();
     await pageInstance.setViewportSize({ width: page.width, height: page.height });
-    const targetUrl = `http://localhost:3000${page.url}`;
+    const targetUrl = `${baseUrl}${page.url}`;
     console.log(`Capturing: ${targetUrl} (${page.width}x${page.height})`);
     await pageInstance.goto(targetUrl, { waitUntil: "networkidle" });
-    await pageInstance.waitForTimeout(500);
+    await pageInstance.waitForTimeout(800);
     const filePath = path.join(screenshotsDir, `${page.name}.png`);
     await pageInstance.screenshot({ path: filePath, fullPage: true });
     console.log(`  Saved: ${filePath}`);

@@ -6,12 +6,15 @@ import {
   Bell,
   BarChart3,
   LayoutDashboard,
+  LogOut,
   Receipt,
   Settings,
   Users,
   X,
 } from "lucide-react";
 import Logo from "@/components/ui/Logo";
+import Button from "@/components/ui/Button";
+import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
   { label: "Dashboard", href: "/app", icon: LayoutDashboard },
@@ -29,6 +32,7 @@ interface AppSidebarProps {
 
 export default function AppSidebar({ open, onClose }: AppSidebarProps) {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   const isActive = (href: string) =>
     href === "/app" ? pathname === "/app" : pathname.startsWith(href);
@@ -85,13 +89,26 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
         <div className="border-t-2 border-ink p-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-ink bg-primary-light font-bold text-primary-dark">
-              B
+              {user?.avatar ?? "BT"}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-ink">Bilal Traders</p>
-              <p className="truncate text-xs text-ink-faint">Free plan</p>
+              <p className="truncate text-sm font-semibold text-ink">
+                {user?.name ?? "Bilal Traders"}
+              </p>
+              <p className="truncate text-xs text-ink-faint">
+                {user?.business ?? "Free plan"}
+              </p>
             </div>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mt-3 w-full justify-start"
+            onClick={() => logout()}
+          >
+            <LogOut className="h-4 w-4" />
+            Log out
+          </Button>
         </div>
       </aside>
     </>

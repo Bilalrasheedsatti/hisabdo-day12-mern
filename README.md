@@ -1,26 +1,28 @@
-# HisabDo – Capstone Project (Day 11)
+# HisabDo – Capstone Project (Day 12)
 
 > **Track:** MERN / Next.js
-> **Day 11 Focus:** Second functional module (Customers), CRUD UI, validation, states, responsive design
+> **Day 12 Focus:** Third functional module (Reminders) with full CRUD, authentication-protected pages structure, improved navigation, and loading/empty/error states
 
-This repository contains the **Day 11** implementation of the **HisabDo** digital
-bookkeeping (khata) ecosystem — extending the Day 10 foundation with a second
-fully functional module (Customers), CRUD-style UI, loading/empty/error states,
-and additional reusable components.
+This repository contains the **Day 12** implementation of the **HisabDo** digital
+bookkeeping (khata) ecosystem. Building on the Days 10–11 foundation (Transactions +
+Customers), Day 12 adds a **third core module — Reminders** with full CRUD, a complete
+**authentication-protected pages structure** (AuthProvider + ProtectedRoute + validated
+login/signup), improved navigation between modules, and reusable-state handling.
 
 ---
 
 ## Table of Contents
 
 1. [What is HisabDo](#what-is-hisabdo)
-2. [What's Implemented (Day 10)](#whats-implemented-day-10)
+2. [What's Implemented](#whats-implemented)
 3. [Pages & Routes](#pages--routes)
 4. [Folder Structure](#folder-structure)
 5. [Design System](#design-system)
-6. [Responsive Layout](#responsive-layout)
-7. [Technology Stack](#technology-stack)
-8. [Setup & Run](#setup--run)
-9. [Submission Checklist](#submission-checklist)
+6. [Authentication (Protected Pages)](#authentication-protected-pages)
+7. [Responsive Layout](#responsive-layout)
+8. [Technology Stack](#technology-stack)
+9. [Setup & Run](#setup--run)
+10. [Submission Checklist](#submission-checklist)
 
 ---
 
@@ -37,8 +39,7 @@ flowchart TD
     A[Landing Page] --> B{Authenticated?}
     B -->|No| C[Login / Signup]
     B -->|Yes| D[Dashboard]
-    C --> E[Business Setup]
-    E --> D
+    C --> D
     D --> F[Customers]
     F --> G[Customer Khata / Ledger]
     G --> H[Add Transaction]
@@ -51,7 +52,7 @@ flowchart TD
 
 ---
 
-## What's Implemented (Day 11)
+## What's Implemented
 
 - ✅ Next.js 14 (App Router) project configured and running
 - ✅ ESLint configured with `next/core-web-vitals` — **lint passes with zero errors**
@@ -59,68 +60,93 @@ flowchart TD
 - ✅ Production build compiles successfully
 - ✅ Clean, scalable folder structure with route groups
   - `(marketing)` – public website
-  - `(auth)` – login/signup
+  - `auth` – login/signup
   - `(app)` – authenticated khata application
 - ✅ **Main application layout** with responsive sidebar + topbar
-- ✅ **Working Dashboard** with live KPI cards, recent entries, and quick actions
-- ✅ **Functional Transactions module** with React Context state management:
-  - Add new credit/debit entries via validated form
-  - Entries persist across pages during the session
-  - Real-time list updates in Transactions page and Dashboard
-- ✅ **Functional Customers module** with full CRUD:
-  - Add new customers via validated modal form
-  - Edit existing customer details
-  - Delete customers with confirmation
-  - Real-time search/filter
-  - Table view on desktop, card view on mobile
-  - Loading, empty, and error states
-- ✅ **Reusable UI components**:
-  - `Button` – primary, secondary, ghost, danger, accent variants with sizes
-  - `Card` – consistent bordered container with brutal shadow
-  - `Badge` – neutral, accent, warn, danger, primary variants
-  - `Input` / `Textarea` / `Select` – form fields with labels
-  - `Table` / `TableHead` / `TableBody` / `TableRow` / `TableCell` / `TableHeaderCell` – reusable data table
-  - `Modal` – overlay dialog for forms and confirmations
-  - `Logo` / `FeatureIcon` – brand components
-- ✅ **Proper form validation** in TransactionForm and CustomerForm:
-  - Customer selection required, amount positive with max limit, date required
-  - Customer name min length, phone format validation, business required
-  - Inline error messages with danger styling
-  - Success feedback on valid submission
-- ✅ **Navigation between pages** via sidebar + topbar
-- ✅ **Responsive UI** across all breakpoints:
-  - Mobile hamburger menu with overlay
-  - Collapsible sidebar drawer
-  - Fluid grids (4 → 2 → 1 columns)
-  - Horizontally scrollable tables
-  - Mobile-first card layouts
-- ✅ **14+ pages** fully built and styled
+
+### Core Functional Modules (3)
+
+- ✅ **Module 1 — Transactions** (`TransactionContext`): add credit/debit entries via a validated form; live list updates; customer names resolved and linked to each Khata page.
+- ✅ **Module 2 — Customers** (`CustomerContext`): full CRUD (add/edit/delete), search/filter, table + mobile cards, loading/empty/error states, validated `CustomerForm`.
+- ✅ **Module 3 — Reminders** (`ReminderContext`): full CRUD (add/edit/delete), search + status filter, table + mobile cards, loading/empty/error states, validated `ReminderForm`.
+
+### State & Validation
+
+- ✅ **Loading**: spinner card while data loads and during mutations (add/edit/delete) in Customers and Reminders.
+- ✅ **Empty**: friendly empty state with illustration and call-to-action.
+- ✅ **Error**: dismissible inline error banners for failed load and mutation operations.
+- ✅ **Form validation** across all module forms and auth forms (inline `text-danger` messages):
+  - `CustomerForm` — name (min 2 chars), Pakistani phone format, business required, optional tags.
+  - `TransactionForm` — customer required, positive amount (max 10,000,000), date required.
+  - `ReminderForm` — customer required, positive amount, method required, scheduled date required, optional note.
+  - `LoginForm` — phone format + password (min 6).
+  - `SignupForm` — business name, phone format, password (min 6), terms required.
+
+### Authentication (Protected Pages)
+
+- ✅ `AuthContext` with `login`/`signup`/`logout` and `localStorage` persistence.
+- ✅ `AuthProvider` wraps the root layout.
+- ✅ `ProtectedRoute` guards the entire `/app` section (spinner while booting, redirect to `/auth/login` when unauthenticated).
+- ✅ App sidebar shows the logged-in user and a **Logout** action.
+- ✅ Auth pages redirect to `/app` when already authenticated; login/signup call the real auth methods.
+
+### Navigation
+
+- ✅ Sidebar navigation across Dashboard, Customers, Transactions, Reminders, Reports, Settings.
+- ✅ AppTopbar "New Entry" links to `/app/transactions`.
+- ✅ Marketing `Navbar` is auth-aware (shows Dashboard when logged in).
+- ✅ Transactions list links customer names to their Khata ledger.
+- ✅ Dashboard quick actions link to every module.
+- ✅ Mobile hamburger drawer with overlay.
+
+### Reusable UI Components
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `Button` | `src/components/ui/Button.tsx` | Multi-variant, multi-size button with link support |
+| `Card` | `src/components/ui/Card.tsx` | Bordered container with brutal shadow |
+| `Badge` | `src/components/ui/Badge.tsx` | Status chips with semantic colors |
+| `Input` / `Textarea` / `Select` | `src/components/ui/Input.tsx` | Form fields with labels |
+| `Table` / `TableHead` / `TableBody` / `TableRow` / `TableCell` / `TableHeaderCell` | `src/components/ui/Table.tsx` | Composable data table |
+| `Modal` | `src/components/ui/Modal.tsx` | Overlay dialog for forms and confirmations |
+| `ProtectedRoute` | `src/components/auth/ProtectedRoute.tsx` | Auth guard for protected pages |
+| `AppSidebar` / `AppTopbar` / `AppShell` | `src/components/layout/` | App chrome navigation |
+| `Logo` / `FeatureIcon` | `src/components/ui/` | Brand components |
+
+### State Contexts
+
+| Context | Location | Scope |
+|---------|----------|-------|
+| `TransactionContext` | `src/context/TransactionContext.tsx` | Transactions (add) |
+| `CustomerContext` | `src/context/CustomerContext.tsx` | Customers (full CRUD) |
+| `ReminderContext` | `src/context/ReminderContext.tsx` | Reminders (full CRUD) |
+| `AuthContext` | `src/context/AuthContext.tsx` | Auth session (login/signup/logout) |
 
 ---
 
 ## Pages & Routes
 
-| # | Page | Route |
-|---|------|-------|
-| 1 | Home / Landing | `/` |
-| 2 | Features | `/features` |
-| 3 | Pricing | `/pricing` |
-| 4 | About | `/about` |
-| 5 | Blog | `/blog` |
-| 6 | Contact | `/contact` |
-| 7 | FAQ | `/faq` |
-| 8 | Download | `/download` |
-| 9 | Privacy Policy | `/privacy` |
-| 10 | Terms of Service | `/terms` |
-| 11 | Login | `/auth/login` |
-| 12 | Signup | `/auth/signup` |
-| 13 | Dashboard | `/app` |
-| 14 | Customers | `/app/customers` |
-| 15 | Customer Khata | `/app/customers/[id]` |
-| 16 | Transactions | `/app/transactions` |
-| 17 | Reminders | `/app/reminders` |
-| 18 | Reports | `/app/reports` |
-| 19 | Settings | `/app/settings` |
+| # | Page | Route | Protected |
+|---|------|-------|:---------:|
+| 1 | Home / Landing | `/` | — |
+| 2 | Features | `/features` | — |
+| 3 | Pricing | `/pricing` | — |
+| 4 | About | `/about` | — |
+| 5 | Blog | `/blog` | — |
+| 6 | Contact | `/contact` | — |
+| 7 | FAQ | `/faq` | — |
+| 8 | Download | `/download` | — |
+| 9 | Privacy Policy | `/privacy` | — |
+| 10 | Terms of Service | `/terms` | — |
+| 11 | Login | `/auth/login` | — |
+| 12 | Signup | `/auth/signup` | — |
+| 13 | Dashboard | `/app` | ✅ |
+| 14 | Customers | `/app/customers` | ✅ |
+| 15 | Customer Khata | `/app/customers/[id]` | ✅ |
+| 16 | Transactions | `/app/transactions` | ✅ |
+| 17 | Reminders | `/app/reminders` | ✅ |
+| 18 | Reports | `/app/reports` | ✅ |
+| 19 | Settings | `/app/settings` | ✅ |
 
 ---
 
@@ -130,46 +156,61 @@ flowchart TD
 src/
 ├── app/
 │   ├── (marketing)/          # Public website (Navbar + Footer layout)
-│   │   ├── page.tsx          # Home
-│   │   ├── features/
-│   │   ├── pricing/
-│   │   ├── about/
-│   │   ├── blog/
-│   │   ├── contact/
-│   │   ├── faq/
-│   │   │   └── FAQAccordion.tsx
-│   │   ├── download/
-│   │   ├── privacy/          # under legal/ layout
-│   │   └── terms/            # under legal/ layout
-│   ├── (auth)/               # Auth pages
-│   │   ├── login/
-│   │   └── signup/
+│   │   └── page.tsx, features/, pricing/, about/, …
+│   ├── auth/                  # Auth pages (login, signup)
+│   │   └── layout.tsx         # Auth layout
 │   ├── (app)/                # Authenticated khata app (Sidebar layout)
-│   │   ├── app/
-│   │   │   ├── page.tsx          # Dashboard
-│   │   │   ├── customers/
-│   │   │   │   └── [id]/         # Customer khata ledger
-│   │   │   ├── transactions/
-│   │   │   ├── reminders/
-│   │   │   ├── reports/
-│   │   │   └── settings/
-│   │   │   └── layout.tsx         # AppShell layout
-│   │   └── layout.tsx         # AppShell layout
-│   ├── layout.tsx             # Root layout + metadata
+│   │   ├── layout.tsx         # Providers + ProtectedRoute + AppShell
+│   │   └── app/
+│   │       ├── page.tsx          # Dashboard
+│   │       ├── customers/
+│   │       │   └── [id]/         # Customer khata ledger
+│   │       ├── transactions/
+│   │       ├── reminders/         # ← Day 12: full CRUD module
+│   │       ├── reports/
+│   │       └── settings/
+│   ├── layout.tsx             # Root layout + metadata + AuthProvider
 │   └── globals.css            # Tailwind base + custom tokens
 ├── components/
+│   ├── auth/                 # ProtectedRoute
 │   ├── layout/               # Navbar, Footer, AppSidebar, AppTopbar, AppShell
 │   ├── transactions/         # TransactionForm
 │   ├── customers/            # CustomerForm, CustomersClient
+│   ├── reminders/            # ← Day 12: ReminderForm, RemindersClient
 │   └── ui/                   # Button, Card, Badge, Input, Modal, Table, Logo, FeatureIcon
 ├── context/
-│   ├── TransactionContext.tsx # Transactions state management
-│   └── CustomerContext.tsx    # Customers state management
+│   ├── AuthContext.tsx       # ← Day 12: auth session provider
+│   ├── TransactionContext.tsx
+│   ├── CustomerContext.tsx
+│   └── ReminderContext.tsx   # ← Day 12: reminders CRUD
 ├── lib/
-│   └── data.ts               # Mock data & helpers
+│   └── data.ts               # Mock data, nav, helpers
 └── types/
-    └── index.ts              # TypeScript types
+    └── index.ts              # TypeScript types (incl. Reminder)
 ```
+
+---
+
+## Authentication (Protected Pages)
+
+Day 12 prepares the UI structure for authentication-protected pages:
+
+1. **`AuthContext`** (`src/context/AuthContext.tsx`) holds `user`, `loading`, and the
+   `login`/`signup`/`logout` actions. The session is persisted to `localStorage`
+   (`hisabdo.user`) so a refresh keeps the user authenticated.
+2. **`AuthProvider`** wraps the root layout, making auth state available to every route.
+3. **`ProtectedRoute`** (`src/components/auth/ProtectedRoute.tsx`) wraps the app shell inside
+   `src/app/(app)/layout.tsx`. While the session is being restored it shows a centered
+   spinner; once resolved it either redirects to `/auth/login` (unauthenticated) or renders
+   the protected children.
+4. **Login & Signup** forms validate input, call the real `login()` / `signup()` methods,
+   and redirect to `/app` on success. Both screens redirect to `/app` if already logged in.
+5. **Logout** is available in the app sidebar footer, and the marketing Navbar shows a
+   "Dashboard" link when authenticated.
+
+> Note: authentication is currently simulated client-side (any valid phone + 6+ char
+> password succeeds). This is intentional for the UI milestone; wire it to a real backend
+> (JWT/session) in a later milestone.
 
 ---
 
@@ -179,19 +220,22 @@ A **cartoon brutalist** design language with:
 
 - Bold **black outlines** (`border-2 border-ink` on cards/buttons)
 - Flat solid colors — blue `primary`, green `accent`, warm cream & blue section backgrounds
-- Chunky drop shadows (`shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg`)
+- Chunky drop shadows (`shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg`, `shadow-brutal-primary`)
 - Expressive chunky typography (`font-extrabold` headings)
 - Zero gradients
 
-Custom Tailwind theme tokens: `primary`, `accent`, `ink`, `warn`, `danger`, `brutal` shadows/radii.
+Custom Tailwind theme tokens: `primary`, `accent`, `ink`, `warn`, `danger`, `brutal`
+shadows/radii (see `tailwind.config.ts`).
 
 ---
 
 ## Responsive Layout
 
 - **Marketing layout**: sticky navbar collapses to a mobile hamburger menu below `md`; footer stacks.
-- **App layout**: fixed sidebar on `lg+`, slide-in drawer with overlay on smaller screens; topbar has mobile menu button; content grids collapse from 4 → 2 → 1 columns.
-- All pages tested with fluid grids, `sm:`/`md:`/`lg:`/`xl:` breakpoints, and horizontally scrollable tables on narrow screens.
+- **App layout**: fixed sidebar on `lg+`, slide-in drawer with overlay on smaller screens; topbar has a
+  mobile menu button; content grids collapse from 4 → 2 → 1 columns.
+- All pages use fluid grids, `sm:`/`md:`/`lg:`/`xl:` breakpoints, and horizontally scrollable tables
+  on narrow screens; module lists switch from a desktop table to mobile cards.
 
 ---
 
@@ -203,6 +247,7 @@ Custom Tailwind theme tokens: `primary`, `accent`, `ink`, `warn`, `danger`, `bru
 - **Tailwind CSS 3**
 - **lucide-react** (icons)
 - **ESLint** with `next/core-web-vitals`
+- **Playwright** (screenshots — `npm run screenshot`)
 
 ---
 
@@ -226,74 +271,53 @@ npm run build
 
 # Start production server
 npm start
+
+# Capture screenshots (dev server must be running on port 3000)
+npm run screenshot
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) and sign in at `/auth/login`
+(phone `0300-1234567`, any password ≥ 6 chars) to access the protected app.
 
 ---
 
-## Day 11 Implementation Highlights
+## Day 12 Implementation Highlights
 
-### Reusable Components
+### Functional Module 3: Reminders (full CRUD)
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `Button` | `src/components/ui/Button.tsx` | Multi-variant, multi-size button with link support |
-| `Card` | `src/components/ui/Card.tsx` | Bordered container with brutal shadow |
-| `Badge` | `src/components/ui/Badge.tsx` | Status chips with semantic colors |
-| `Input` | `src/components/ui/Input.tsx` | Labeled input, textarea, select |
-| `Table` | `src/components/ui/Table.tsx` | Composable data table with header/body/row/cell |
-| `Modal` | `src/components/ui/Modal.tsx` | Overlay dialog for forms and confirmations |
-| `AppSidebar` | `src/components/layout/AppSidebar.tsx` | Responsive navigation drawer |
-| `AppTopbar` | `src/components/layout/AppTopbar.tsx` | Sticky header with search + actions |
+- `ReminderContext` provides global state for reminders with async create, read, update, and
+  delete, plus `loading` and `error` states.
+- `ReminderForm` handles add and edit modes with validation (customer, amount, method, date)
+  and is reused inside the reusable `Modal`.
+- `RemindersClient` renders a data table on desktop and a card grid on mobile with search and
+  a status filter; shows loading, empty, and error states; and confirms deletes via `Modal`.
+- Customer names are resolved from `CustomerContext` and link back to each customer's ledger.
 
-### Form Validation (TransactionForm)
+### Authentication-protected pages
 
-- **Customer**: must be selected (error: "Please select a customer")
-- **Amount**: required, must be positive, max 10,000,000 (error messages for missing/invalid/too large)
-- **Date**: required (error: "Date is required")
-- Inline error messages styled with `text-danger`
-- Success message on valid submission
+- `AuthContext` (login/signup/logout) persisted to `localStorage`; `AuthProvider` at the root.
+- `ProtectedRoute` guards `/app/*` and redirects unauthenticated users to `/auth/login`.
+- Login/Signup forms validate and call the real auth methods.
 
-### Form Validation (CustomerForm)
+### Navigation improvements
 
-- **Name**: required, min 2 characters
-- **Phone**: required, must be valid Pakistani phone format (03xxxxxxxxx)
-- **Business**: required
-- **Tags**: optional comma-separated list
-- Inline error messages styled with `text-danger`
-- Success message on valid submission
-
-### Functional Module 1: Transactions
-
-- `TransactionContext` provides global state for transactions
-- `TransactionForm` dispatches new entries via `addTransaction`
-- `TransactionsClient` renders live table of all entries with responsive layout
-- `DashboardPage` shows the 5 most recent entries
-- `CustomerKhataPage` filters transactions by customer and computes running balance
-
-### Functional Module 2: Customers
-
-- `CustomerContext` provides global state for customers with async CRUD operations
-- `CustomerForm` handles add and edit modes with validation
-- `CustomersClient` renders a data table on desktop and card grid on mobile
-- Features real-time search, loading states, empty state, and error state
-- Delete confirmation via reusable `Modal`
-- Dashboard KPIs are computed dynamically from actual customer and transaction data
-- Customer detail page (`/app/customers/[id]`) reads from context instead of static data
+- AppTopbar "New Entry" → `/app/transactions`.
+- Transactions list links customer names to `/app/customers/[id]`.
+- Marketing Navbar shows Dashboard when authenticated; Logout in the app sidebar.
 
 ---
 
 ## Submission Checklist
 
-- [x] GitHub repository — [https://github.com/Bilalrasheedsatti/hisabdo-day11-mern](https://github.com/Bilalrasheedsatti/hisabdo-day11-mern)
-- [x] Working Dashboard with live data
-- [x] Two functional modules (Transactions + Customers with CRUD)
-- [x] Navigation between pages (Sidebar + Topbar)
-- [x] Responsive UI (mobile, tablet, desktop)
-- [x] Reusable components (Button, Card, Badge, Input, Modal, Table, Nav)
-- [x] Form validation (TransactionForm + CustomerForm)
+- [x] GitHub repository — [https://github.com/Bilalrasheedsatti/hisabdo-day12-mern](https://github.com/Bilalrasheedsatti/hisabdo-day12-mern)
+- [x] Three functional core modules (Transactions, Customers, Reminders with full CRUD)
+- [x] Authentication-protected pages structure (AuthProvider + ProtectedRoute + guarded `/app`)
+- [x] Navigation between modules (sidebar, topbar, customer links, quick actions)
+- [x] Form validation in all module forms and auth forms
 - [x] Loading, empty, and error states
+- [x] Responsive UI (mobile, tablet, desktop)
+- [x] Reusable components (Button, Card, Badge, Input, Modal, Table, ProtectedRoute)
+- [x] Screenshots for all pages (see `screenshots/`)
 - [x] ESLint passes with zero errors
 - [x] TypeScript type check passes
 - [x] Production build succeeds

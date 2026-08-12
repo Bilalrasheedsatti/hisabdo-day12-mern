@@ -2,6 +2,7 @@
 
 import { Bell, Menu, Plus, Search } from "lucide-react";
 import { useState } from "react";
+import Button from "@/components/ui/Button";
 
 interface AppTopbarProps {
   onMenuClick: () => void;
@@ -41,13 +42,13 @@ export default function AppTopbar({ onMenuClick }: AppTopbarProps) {
         >
           <Bell className="h-5 w-5" />
         </button>
-        <button
-          type="button"
+        <Button
+          href="/app/transactions"
           className="hidden items-center gap-1.5 rounded-lg border-2 border-ink bg-primary px-4 py-2 text-sm font-semibold text-white shadow-brutal-sm transition-colors hover:bg-primary-dark sm:inline-flex"
         >
           <Plus className="h-4 w-4" />
           New Entry
-        </button>
+        </Button>
       </div>
     </header>
   );

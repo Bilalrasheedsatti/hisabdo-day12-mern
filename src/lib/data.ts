@@ -6,6 +6,7 @@ import type {
   NavItem,
   PricingPlan,
   RecentEntry,
+  Reminder,
   Transaction,
 } from "@/types";
 
@@ -167,6 +168,39 @@ export const ledgerTransactions: Transaction[] = [
   { id: "tx-4", customerId: "c-1", type: "credit", amount: 3200, note: "Soft drinks crate", date: "Aug 8, 2026" },
   { id: "tx-5", customerId: "c-1", type: "debit", amount: 2500, note: "Part payment", date: "Aug 6, 2026" },
   { id: "tx-6", customerId: "c-1", type: "credit", amount: 14700, note: "Flour bags order", date: "Aug 4, 2026" },
+];
+
+export const reminders: Reminder[] = [
+  {
+    id: "r-1",
+    customerId: "c-1",
+    amount: 112500,
+    method: "whatsapp",
+    status: "delivered",
+    scheduledDate: "Aug 12, 2026",
+    note: "Overdue balance reminder",
+    sentAt: "Aug 12, 2026 09:00",
+  },
+  {
+    id: "r-2",
+    customerId: "c-2",
+    amount: 55500,
+    method: "sms",
+    status: "sent",
+    scheduledDate: "Aug 12, 2026",
+    note: "Monthly settlement reminder",
+    sentAt: "Aug 12, 2026 08:45",
+  },
+  {
+    id: "r-3",
+    customerId: "c-4",
+    amount: 54100,
+    method: "whatsapp",
+    status: "scheduled",
+    scheduledDate: "Aug 13, 2026",
+    note: "Overdue balance follow-up",
+    sentAt: null,
+  },
 ];
 
 export const pricingPlans: PricingPlan[] = [

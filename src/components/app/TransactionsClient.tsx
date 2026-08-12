@@ -1,12 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { useTransactions } from "@/context/TransactionContext";
+import { useCustomers } from "@/context/CustomerContext";
 import TransactionForm from "@/components/transactions/TransactionForm";
 import { formatCurrency } from "@/lib/data";
-import { ArrowDownLeft, ArrowUpRight, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import Table from "@/components/ui/Table";
 import {
   TableBody,
@@ -18,6 +20,10 @@ import {
 
 export default function TransactionsClient() {
   const { transactions } = useTransactions();
+  const { customers } = useCustomers();
+
+  const customerName = (id: string) =>
+    customers.find((c) => c.id === id)?.name ?? "Unknown customer";
 
   return (
     <div className="space-y-6">
@@ -62,7 +68,14 @@ export default function TransactionsClient() {
                   {transactions.map((entry) => (
                     <TableRow key={entry.id}>
                       <TableCell>{entry.date}</TableCell>
-                      <TableCell className="font-medium text-ink">{entry.customerId}</TableCell>
+                      <TableCell className="font-medium text-ink">
+                        <Link
+                          href={`/app/customers/${entry.customerId}`}
+                          className="text-primary underline decoration-2 underline-offset-2 hover:opacity-80"
+                        >
+                          {customerName(entry.customerId)}
+                        </Link>
+                      </TableCell>
                       <TableCell>
                         <Badge variant={entry.type === "credit" ? "warn" : "accent"}>
                           {entry.type === "credit" ? "Credit" : "Debit"}
