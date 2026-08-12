@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import AppShell from "@/components/layout/AppShell";
 import { TransactionProvider } from "@/context/TransactionContext";
+import { CustomerProvider } from "@/context/CustomerContext";
 
 export const metadata = {
   title: {
@@ -11,8 +12,10 @@ export const metadata = {
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <TransactionProvider>
-      <AppShell>{children}</AppShell>
-    </TransactionProvider>
+    <CustomerProvider>
+      <TransactionProvider>
+        <AppShell>{children}</AppShell>
+      </TransactionProvider>
+    </CustomerProvider>
   );
 }

@@ -1,4 +1,4 @@
-# Day 10 Progress Report – HisabDo Capstone Project
+# Day 11 Progress Report – HisabDo Capstone Project
 
 **Track:** MERN / Next.js  
 **Date:** 2026-08-12  
@@ -8,75 +8,67 @@
 
 ## Today's Objective
 
-Continue from the Day 9 project structure and implement the core functionality of the web application: working dashboard, one functional module, reusable components, form validation, and responsive UI.
+Continue from the Day 10 project and implement a second functional core module (Customers) with full CRUD operations, connect it with the Dashboard and existing navigation, add loading/empty/error states, and ensure responsive design with reusable components.
 
 ---
 
 ## What Was Completed
 
-### 1. Main Application Layout
-- Confirmed responsive `AppShell` layout with `AppSidebar` (mobile drawer + desktop fixed) and `AppTopbar` (sticky header).
-- Sidebar navigation covers all app routes: Dashboard, Customers, Transactions, Reminders, Reports, Settings.
+### 1. Customers Module (CRUD)
+- Built a fully functional **Customers** module (`/app/customers`) using React Context (`CustomerContext`) for client-side state management.
+- **Add Customer**: Modal form with validated fields (name, phone, business, tags).
+- **Edit Customer**: Same modal form pre-filled with existing data.
+- **Delete Customer**: Confirmation modal before removal.
+- **Search/Filter**: Real-time filtering by name, phone, business, or tags.
+- **List Views**:
+  - Desktop: Responsive data table with action buttons.
+  - Mobile: Stacked card layout with touch-friendly actions.
 
-### 2. Dashboard Page
-- Implemented a working Dashboard at `/app` with:
-  - 4 KPI stat cards (Total Receivable, Total Payable, Today's Entries, Active Customers).
-  - Recent Entries list with credit/debit indicators and timestamps.
-  - Quick Actions panel for fast navigation.
+### 2. States Handling
+- **Loading**: Skeleton/spinner during initial data load and mutation operations (add/edit/delete).
+- **Empty**: Friendly empty state with illustration and call-to-action when no customers match.
+- **Error**: Inline error banners for failed operations with dismiss action.
 
-### 3. Functional Module: Transactions
-- Built a fully functional **Transactions** module (`/app/transactions`) using React Context (`TransactionContext`) for client-side state management.
-- **New Entry form** allows selecting customer, entry type (credit/debit), amount, date, and note.
-- Entries added via the form immediately appear in:
-  - The **Transactions** page table.
-  - The **Dashboard** recent entries list.
-  - The **Customer Khata** ledger (`/app/customers/[id]`) filtered by customer, with a running balance.
+### 3. Form Validation (CustomerForm)
+- **Name**: required, minimum 2 characters.
+- **Phone**: required, must match Pakistani mobile format (`^03\d{9}$`).
+- **Business**: required.
+- **Tags**: optional, comma-separated.
+- Inline error messages with `text-danger` styling.
+- Success feedback on valid submission.
 
-### 4. Reusable Components
-Created and used the following reusable components across the app:
+### 4. Dashboard Integration
+- Dashboard KPIs are now computed dynamically from live context data:
+  - Total Receivable / Payable across all customers.
+  - Today&apos; s entries count.
+  - Active customers count.
+- Recent entries continue to sync with the Transactions module.
 
-| Component | File | Purpose |
-|-----------|------|---------|
-| `Button` | `src/components/ui/Button.tsx` | Multi-variant, multi-size button with optional `href` link support |
-| `Card` | `src/components/ui/Card.tsx` | Consistent bordered container with brutal shadow |
-| `Badge` | `src/components/ui/Badge.tsx` | Status chips with semantic color variants |
-| `Input` | `src/components/ui/Input.tsx` | Labeled input, textarea, and select fields |
-| `Table` | `src/components/ui/Table.tsx` | Composable data table with `TableHead`, `TableBody`, `TableRow`, `TableCell`, `TableHeaderCell` |
-| `AppSidebar` | `src/components/layout/AppSidebar.tsx` | Responsive navigation drawer with active state |
-| `AppTopbar` | `src/components/layout/AppTopbar.tsx` | Sticky header with search and quick actions |
+### 5. Navigation & Connectivity
+- Customers module is accessible from sidebar and Dashboard quick actions.
+- Customer detail page (`/app/customers/[id]`) uses the Customer context instead of static data.
+- All CRUD operations immediately reflect in the Customers list and Dashboard.
 
-### 5. Form Validation
-- Implemented client-side validation in `TransactionForm`:
-  - **Customer**: required selection.
-  - **Amount**: required, must be a positive number, max limit check (10,000,000).
-  - **Date**: required.
-  - Displays inline error messages styled with `text-danger`.
-  - Shows success feedback on valid submission.
-
-### 6. Responsive UI
-- All pages use fluid Tailwind grids (`grid-cols-1` → `grid-cols-2` → `grid-cols-4`).
-- Mobile hamburger menu with overlay in the marketing navbar.
-- Collapsible sidebar drawer on smaller screens for the app layout.
-- Horizontally scrollable tables on narrow viewports.
+### 6. Reusable Components
+Added `Modal` component used across the Customers module for forms and delete confirmation.
 
 ---
 
 ## Files Added / Modified
 
 **New files:**
-- `src/context/TransactionContext.tsx`
-- `src/components/app/DashboardClient.tsx`
-- `src/components/app/TransactionsClient.tsx`
-- `src/components/app/KhataClient.tsx`
-- `src/components/ui/Table.tsx`
+- `src/context/CustomerContext.tsx`
+- `src/components/ui/Modal.tsx`
+- `src/components/customers/CustomerForm.tsx`
+- `src/components/customers/CustomersClient.tsx`
 
 **Modified files:**
-- `src/app/(app)/layout.tsx` — wrapped app with `TransactionProvider`
-- `src/app/(app)/app/page.tsx` — delegated to `DashboardClient`
-- `src/app/(app)/app/transactions/page.tsx` — delegated to `TransactionsClient`
-- `src/app/(app)/app/customers/[id]/page.tsx` — delegated to `KhataClient`
-- `src/components/transactions/TransactionForm.tsx` — added validation
-- `README.md` — updated for Day 10
+- `src/app/(app)/layout.tsx` — wrapped app with `CustomerProvider`
+- `src/app/(app)/app/customers/page.tsx` — delegated to `CustomersClient`
+- `src/app/(app)/app/customers/[id]/page.tsx` — removed static `notFound`, delegated to `KhataClient`
+- `src/components/app/KhataClient.tsx` — uses `useCustomers` context instead of static data
+- `src/components/app/DashboardClient.tsx` — dynamic KPIs from context
+- `README.md` — updated for Day 11
 
 ---
 
@@ -84,8 +76,12 @@ Created and used the following reusable components across the app:
 
 - ✅ `npm run lint` — no warnings or errors
 - ✅ `npx tsc --noEmit` — no type errors
-- ✅ `npm run build` — successful production build (27 pages)
-- ✅ Git committed and force-pushed to `https://github.com/Bilalrasheedsatti/hisabdo-day10-mern`
+- ✅ `npm run build` — successful production build
+- ✅ Two functional modules (Transactions + Customers) with working CRUD
+- ✅ Navigation between pages functional
+- ✅ Form validation in both modules
+- ✅ Loading, empty, and error states implemented
+- ✅ Responsive design verified across breakpoints
 
 ---
 
@@ -93,7 +89,7 @@ Created and used the following reusable components across the app:
 
 Screenshots for all major pages are available in the `screenshots/` folder:
 - Dashboard (desktop + mobile)
-- Customers
+- Customers (desktop + mobile)
 - Customer Khata
 - Transactions
 - Reminders
@@ -103,9 +99,9 @@ Screenshots for all major pages are available in the `screenshots/` folder:
 
 ---
 
-## Next Steps (Day 11 Preview)
+## Next Steps (Day 12 Preview)
 
-- Connect transactions to a backend API (MongoDB/MERN).
+- Connect to backend API (MongoDB/Express) for persistent storage.
 - Implement user authentication and protected routes.
-- Add customer creation and management forms.
-- Enable CSV/Excel export for transactions.
+- Add CSV/Excel export for customers and transactions.
+- Enable customer import from phone contacts.

@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useTransactions } from "@/context/TransactionContext";
+import { useCustomers } from "@/context/CustomerContext";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { customers } from "@/lib/data";
 import { formatCurrency } from "@/lib/data";
 import { ArrowLeft, ArrowDownLeft, ArrowUpRight, Phone, MessageCircle, Bell } from "lucide-react";
 import Table from "@/components/ui/Table";
@@ -30,8 +30,30 @@ function getInitials(name: string) {
 }
 
 export default function KhataClient({ customerId }: KhataClientProps) {
-  const customer = customers.find((c) => c.id === customerId);
+  const { getCustomer } = useCustomers();
   const { transactions } = useTransactions();
+
+  const customer = getCustomer(customerId);
+
+  if (!customer) {
+    return (
+      <div className="space-y-6">
+        <Link
+          href="/app/customers"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-soft hover:text-primary"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Customers
+        </Link>
+        <Card className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-lg font-extrabold text-ink">Customer not found</p>
+          <p className="mt-1 text-sm text-ink-soft">
+            The customer you are looking for does not exist.
+          </p>
+        </Card>
+      </div>
+    );
+  }
 
   if (!customer) {
     return null;

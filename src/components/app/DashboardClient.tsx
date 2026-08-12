@@ -5,7 +5,7 @@ import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { useTransactions } from "@/context/TransactionContext";
-import { kpiStats } from "@/lib/data";
+import { useCustomers } from "@/context/CustomerContext";
 import { formatCurrency } from "@/lib/data";
 import {
   ArrowDownLeft,
@@ -16,8 +16,26 @@ import {
 
 export default function DashboardClient() {
   const { transactions } = useTransactions();
+  const { customers } = useCustomers();
 
   const recentEntries = transactions.slice(0, 5);
+
+  const totalReceivable = customers.reduce((sum, c) => sum + c.outstanding, 0);
+  const totalPayable = customers.reduce((sum, c) => sum + c.totalDebit, 0);
+  const today = new Date().toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const todayEntries = transactions.filter((t) => t.date === today || t.date === new Date().toISOString().slice(0, 10));
+  const activeCustomers = new Set(transactions.map((t) => t.customerId)).size;
+
+  const kpiStats = [
+    { label: "Total Receivable", value: formatCurrency(totalReceivable), delta: "Across all customers", positive: true },
+    { label: "Total Payable", value: formatCurrency(totalPayable), delta: "All time payables", positive: true },
+    { label: "Today's Entries", value: `${todayEntries.length} entries`, delta: "Recorded today", positive: true },
+    { label: "Active Customers", value: `${activeCustomers}`, delta: "With transactions", positive: true },
+  ];
 
   return (
     <div className="space-y-6">

@@ -1,11 +1,12 @@
-# HisabDo – Capstone Project (Day 10)
+# HisabDo – Capstone Project (Day 11)
 
 > **Track:** MERN / Next.js
-> **Day 10 Focus:** Core functionality, reusable components, form validation & responsive UI
+> **Day 11 Focus:** Second functional module (Customers), CRUD UI, validation, states, responsive design
 
-This repository contains the **Day 10** implementation of the **HisabDo** digital
-bookkeeping (khata) ecosystem — extending the Day 9 foundation with working
-application logic, reusable components, and validated forms.
+This repository contains the **Day 11** implementation of the **HisabDo** digital
+bookkeeping (khata) ecosystem — extending the Day 10 foundation with a second
+fully functional module (Customers), CRUD-style UI, loading/empty/error states,
+and additional reusable components.
 
 ---
 
@@ -50,7 +51,7 @@ flowchart TD
 
 ---
 
-## What's Implemented (Day 10)
+## What's Implemented (Day 11)
 
 - ✅ Next.js 14 (App Router) project configured and running
 - ✅ ESLint configured with `next/core-web-vitals` — **lint passes with zero errors**
@@ -66,17 +67,24 @@ flowchart TD
   - Add new credit/debit entries via validated form
   - Entries persist across pages during the session
   - Real-time list updates in Transactions page and Dashboard
+- ✅ **Functional Customers module** with full CRUD:
+  - Add new customers via validated modal form
+  - Edit existing customer details
+  - Delete customers with confirmation
+  - Real-time search/filter
+  - Table view on desktop, card view on mobile
+  - Loading, empty, and error states
 - ✅ **Reusable UI components**:
   - `Button` – primary, secondary, ghost, danger, accent variants with sizes
   - `Card` – consistent bordered container with brutal shadow
   - `Badge` – neutral, accent, warn, danger, primary variants
   - `Input` / `Textarea` / `Select` – form fields with labels
   - `Table` / `TableHead` / `TableBody` / `TableRow` / `TableCell` / `TableHeaderCell` – reusable data table
+  - `Modal` – overlay dialog for forms and confirmations
   - `Logo` / `FeatureIcon` – brand components
-- ✅ **Proper form validation** in TransactionForm:
-  - Customer selection required
-  - Amount required, must be positive number, max limit check
-  - Date required
+- ✅ **Proper form validation** in TransactionForm and CustomerForm:
+  - Customer selection required, amount positive with max limit, date required
+  - Customer name min length, phone format validation, business required
   - Inline error messages with danger styling
   - Success feedback on valid submission
 - ✅ **Navigation between pages** via sidebar + topbar
@@ -85,6 +93,7 @@ flowchart TD
   - Collapsible sidebar drawer
   - Fluid grids (4 → 2 → 1 columns)
   - Horizontally scrollable tables
+  - Mobile-first card layouts
 - ✅ **14+ pages** fully built and styled
 
 ---
@@ -144,15 +153,18 @@ src/
 │   │   │   ├── reminders/
 │   │   │   ├── reports/
 │   │   │   └── settings/
+│   │   │   └── layout.tsx         # AppShell layout
 │   │   └── layout.tsx         # AppShell layout
 │   ├── layout.tsx             # Root layout + metadata
 │   └── globals.css            # Tailwind base + custom tokens
 ├── components/
 │   ├── layout/               # Navbar, Footer, AppSidebar, AppTopbar, AppShell
 │   ├── transactions/         # TransactionForm
-│   └── ui/                   # Button, Card, Badge, Input, Logo, FeatureIcon, Table
+│   ├── customers/            # CustomerForm, CustomersClient
+│   └── ui/                   # Button, Card, Badge, Input, Modal, Table, Logo, FeatureIcon
 ├── context/
-│   └── TransactionContext.tsx # Transactions state management
+│   ├── TransactionContext.tsx # Transactions state management
+│   └── CustomerContext.tsx    # Customers state management
 ├── lib/
 │   └── data.ts               # Mock data & helpers
 └── types/
@@ -220,7 +232,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Day 10 Implementation Highlights
+## Day 11 Implementation Highlights
 
 ### Reusable Components
 
@@ -231,6 +243,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `Badge` | `src/components/ui/Badge.tsx` | Status chips with semantic colors |
 | `Input` | `src/components/ui/Input.tsx` | Labeled input, textarea, select |
 | `Table` | `src/components/ui/Table.tsx` | Composable data table with header/body/row/cell |
+| `Modal` | `src/components/ui/Modal.tsx` | Overlay dialog for forms and confirmations |
 | `AppSidebar` | `src/components/layout/AppSidebar.tsx` | Responsive navigation drawer |
 | `AppTopbar` | `src/components/layout/AppTopbar.tsx` | Sticky header with search + actions |
 
@@ -242,25 +255,45 @@ Open [http://localhost:3000](http://localhost:3000).
 - Inline error messages styled with `text-danger`
 - Success message on valid submission
 
-### Functional Module: Transactions
+### Form Validation (CustomerForm)
+
+- **Name**: required, min 2 characters
+- **Phone**: required, must be valid Pakistani phone format (03xxxxxxxxx)
+- **Business**: required
+- **Tags**: optional comma-separated list
+- Inline error messages styled with `text-danger`
+- Success message on valid submission
+
+### Functional Module 1: Transactions
 
 - `TransactionContext` provides global state for transactions
 - `TransactionForm` dispatches new entries via `addTransaction`
-- `TransactionsPage` renders live table of all entries
+- `TransactionsClient` renders live table of all entries with responsive layout
 - `DashboardPage` shows the 5 most recent entries
 - `CustomerKhataPage` filters transactions by customer and computes running balance
+
+### Functional Module 2: Customers
+
+- `CustomerContext` provides global state for customers with async CRUD operations
+- `CustomerForm` handles add and edit modes with validation
+- `CustomersClient` renders a data table on desktop and card grid on mobile
+- Features real-time search, loading states, empty state, and error state
+- Delete confirmation via reusable `Modal`
+- Dashboard KPIs are computed dynamically from actual customer and transaction data
+- Customer detail page (`/app/customers/[id]`) reads from context instead of static data
 
 ---
 
 ## Submission Checklist
 
-- [x] GitHub repository — [https://github.com/Bilalrasheedsatti/hisabdo-day10-mern](https://github.com/Bilalrasheedsatti/hisabdo-day10-mern)
+- [x] GitHub repository — [https://github.com/Bilalrasheedsatti/hisabdo-day11-mern](https://github.com/Bilalrasheedsatti/hisabdo-day11-mern)
 - [x] Working Dashboard with live data
-- [x] One functional module (Transactions with form validation)
+- [x] Two functional modules (Transactions + Customers with CRUD)
 - [x] Navigation between pages (Sidebar + Topbar)
 - [x] Responsive UI (mobile, tablet, desktop)
-- [x] Reusable components (Button, Card, Badge, Input, Table, Nav)
-- [x] Form validation (TransactionForm)
+- [x] Reusable components (Button, Card, Badge, Input, Modal, Table, Nav)
+- [x] Form validation (TransactionForm + CustomerForm)
+- [x] Loading, empty, and error states
 - [x] ESLint passes with zero errors
 - [x] TypeScript type check passes
 - [x] Production build succeeds
