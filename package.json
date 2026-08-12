@@ -2,7 +2,7 @@
   "name": "hisabdo",
   "version": "0.1.0",
   "private": true,
-  "description": "HisabDo - Modern Next.js web implementation of the digital bookkeeping (khata) ecosystem. Day 8 architecture & planning.",
+  "description": "HisabDo - Modern Next.js web implementation of the digital bookkeeping (khata) ecosystem.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

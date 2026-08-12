@@ -87,7 +87,7 @@ Detailed journey steps are in the main `README.md`.
 12. Signup (`/auth/signup`)
 
 ### Application Pages
-13. App Dashboard (`/app/dashboard`)
+13. App Dashboard (`/app`)
 14. Customers (`/app/customers`)
 15. Customer Khata (`/app/customers/[id]`)
 16. Transactions (`/app/transactions`)
@@ -153,7 +153,7 @@ Landing → Auth → Dashboard → Customers → Khata → Transactions
 
 ## 10. Next Steps (Future Days)
 
-- Day 9: Set up ESlint/Prettier, CI, and component library.
+- ~~Day 9: Set up ESlint/Prettier, CI, and component library.~~ ✅ Complete
 - Day 10+: Begin feature implementation (auth → dashboard → customers → khata → transactions → reminders → reports → settings).
 - Integrate backend API and database.
 
