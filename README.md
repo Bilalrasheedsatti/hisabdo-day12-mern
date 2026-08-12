@@ -1,18 +1,18 @@
-# HisabDo – Main Capstone Project (Day 9)
+# HisabDo – Capstone Project (Day 10)
 
 > **Track:** MERN / Next.js
-> **Day 9 Focus:** Project setup, UI implementation & responsive layouts
+> **Day 10 Focus:** Core functionality, reusable components, form validation & responsive UI
 
-This repository contains a working **Next.js** web implementation of the
-**HisabDo** digital bookkeeping (khata) ecosystem — from marketing website to the
-authenticated bookkeeping app.
+This repository contains the **Day 10** implementation of the **HisabDo** digital
+bookkeeping (khata) ecosystem — extending the Day 9 foundation with working
+application logic, reusable components, and validated forms.
 
 ---
 
 ## Table of Contents
 
 1. [What is HisabDo](#what-is-hisabdo)
-2. [What's Implemented (Day 9)](#whats-implemented-day-9)
+2. [What's Implemented (Day 10)](#whats-implemented-day-10)
 3. [Pages & Routes](#pages--routes)
 4. [Folder Structure](#folder-structure)
 5. [Design System](#design-system)
@@ -50,36 +50,42 @@ flowchart TD
 
 ---
 
-## What's Implemented (Day 9)
+## What's Implemented (Day 10)
 
 - ✅ Next.js 14 (App Router) project configured and running
 - ✅ ESLint configured with `next/core-web-vitals` — **lint passes with zero errors**
 - ✅ TypeScript strict mode — **type check passes**
-- ✅ Production build compiles successfully (27 static pages)
+- ✅ Production build compiles successfully
 - ✅ Clean, scalable folder structure with route groups
   - `(marketing)` – public website
   - `(auth)` – login/signup
   - `(app)` – authenticated khata application
-- ✅ Initial layout:
-  - Sticky responsive **Header/Navbar** with mobile menu
-  - **Sidebar** for the app area (mobile drawer + desktop fixed)
-  - **Footer** with links & socials
-  - Responsive layouts for desktop, tablet and mobile
-- ✅ **14+ major pages implemented**:
-  - **Home/Landing** – hero, features, how-it-works, CTA
-  - **Features** – full feature grid + reminders showcase
-  - **Pricing** – tiered plans with highlight badge
-  - **Dashboard** – KPIs, recent entries, quick actions
-  - **Customers** – customer grid, search, tags
-  - **Customer Khata** – per-customer ledger with running balance
-  - **Transactions** – entry form + all entries list
-  - **Reports** – KPIs, monthly bar chart, top customers
-  - **Reminders** – SMS/WhatsApp reminders with status tracking
-  - **Settings** – business profile, backup, security, notifications
-  - **About, Blog, Contact, FAQ (accordion), Download, Privacy, Terms**
-  - **Auth** – Login, Signup
-- ✅ Fully responsive: mobile, tablet, desktop
-- ✅ Brutalist design system with Tailwind custom tokens
+- ✅ **Main application layout** with responsive sidebar + topbar
+- ✅ **Working Dashboard** with live KPI cards, recent entries, and quick actions
+- ✅ **Functional Transactions module** with React Context state management:
+  - Add new credit/debit entries via validated form
+  - Entries persist across pages during the session
+  - Real-time list updates in Transactions page and Dashboard
+- ✅ **Reusable UI components**:
+  - `Button` – primary, secondary, ghost, danger, accent variants with sizes
+  - `Card` – consistent bordered container with brutal shadow
+  - `Badge` – neutral, accent, warn, danger, primary variants
+  - `Input` / `Textarea` / `Select` – form fields with labels
+  - `Table` / `TableHead` / `TableBody` / `TableRow` / `TableCell` / `TableHeaderCell` – reusable data table
+  - `Logo` / `FeatureIcon` – brand components
+- ✅ **Proper form validation** in TransactionForm:
+  - Customer selection required
+  - Amount required, must be positive number, max limit check
+  - Date required
+  - Inline error messages with danger styling
+  - Success feedback on valid submission
+- ✅ **Navigation between pages** via sidebar + topbar
+- ✅ **Responsive UI** across all breakpoints:
+  - Mobile hamburger menu with overlay
+  - Collapsible sidebar drawer
+  - Fluid grids (4 → 2 → 1 columns)
+  - Horizontally scrollable tables
+- ✅ **14+ pages** fully built and styled
 
 ---
 
@@ -144,7 +150,9 @@ src/
 ├── components/
 │   ├── layout/               # Navbar, Footer, AppSidebar, AppTopbar, AppShell
 │   ├── transactions/         # TransactionForm
-│   └── ui/                   # Button, Card, Badge, Input, Logo, FeatureIcon
+│   └── ui/                   # Button, Card, Badge, Input, Logo, FeatureIcon, Table
+├── context/
+│   └── TransactionContext.tsx # Transactions state management
 ├── lib/
 │   └── data.ts               # Mock data & helpers
 └── types/
@@ -212,61 +220,47 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Screenshots
+## Day 10 Implementation Highlights
 
-### Marketing Pages
+### Reusable Components
 
-#### Home — Desktop
-![Home (desktop)](screenshots/home-desktop.png)
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `Button` | `src/components/ui/Button.tsx` | Multi-variant, multi-size button with link support |
+| `Card` | `src/components/ui/Card.tsx` | Bordered container with brutal shadow |
+| `Badge` | `src/components/ui/Badge.tsx` | Status chips with semantic colors |
+| `Input` | `src/components/ui/Input.tsx` | Labeled input, textarea, select |
+| `Table` | `src/components/ui/Table.tsx` | Composable data table with header/body/row/cell |
+| `AppSidebar` | `src/components/layout/AppSidebar.tsx` | Responsive navigation drawer |
+| `AppTopbar` | `src/components/layout/AppTopbar.tsx` | Sticky header with search + actions |
 
-#### Home — Mobile
-![Home (mobile)](screenshots/home-mobile.png)
+### Form Validation (TransactionForm)
 
-#### Features
-![Features](screenshots/features.png)
+- **Customer**: must be selected (error: "Please select a customer")
+- **Amount**: required, must be positive, max 10,000,000 (error messages for missing/invalid/too large)
+- **Date**: required (error: "Date is required")
+- Inline error messages styled with `text-danger`
+- Success message on valid submission
 
-#### Pricing
-![Pricing](screenshots/pricing.png)
+### Functional Module: Transactions
 
-#### Login
-![Login](screenshots/login.png)
-
-#### Signup
-![Signup](screenshots/signup.png)
-
-### App Pages
-
-#### Dashboard — Desktop
-![Dashboard (desktop)](screenshots/dashboard.png)
-
-#### Dashboard — Mobile
-![Dashboard (mobile)](screenshots/dashboard-mobile.png)
-
-#### Customers
-![Customers](screenshots/customers.png)
-
-#### Customer Khata (Ledger)
-![Customer Khata](screenshots/customer-khata.png)
-
-#### Transactions
-![Transactions](screenshots/transactions.png)
-
-#### Reports
-![Reports](screenshots/reports.png)
-
-#### Reminders
-![Reminders](screenshots/reminders.png)
-
-#### Settings
-![Settings](screenshots/settings.png)
+- `TransactionContext` provides global state for transactions
+- `TransactionForm` dispatches new entries via `addTransaction`
+- `TransactionsPage` renders live table of all entries
+- `DashboardPage` shows the 5 most recent entries
+- `CustomerKhataPage` filters transactions by customer and computes running balance
 
 ---
 
 ## Submission Checklist
 
-- [x] GitHub repository — [https://github.com/Bilalrasheedsatti/hisabdo-day9-mern](https://github.com/Bilalrasheedsatti/hisabdo-day9-mern)
-- [x] Working Next.js project (build passes, 27 static pages)
-- [x] Screenshots/video of implemented pages
-- [x] Updated README
+- [x] GitHub repository — [https://github.com/Bilalrasheedsatti/hisabdo-day10-mern](https://github.com/Bilalrasheedsatti/hisabdo-day10-mern)
+- [x] Working Dashboard with live data
+- [x] One functional module (Transactions with form validation)
+- [x] Navigation between pages (Sidebar + Topbar)
+- [x] Responsive UI (mobile, tablet, desktop)
+- [x] Reusable components (Button, Card, Badge, Input, Table, Nav)
+- [x] Form validation (TransactionForm)
 - [x] ESLint passes with zero errors
 - [x] TypeScript type check passes
+- [x] Production build succeeds
