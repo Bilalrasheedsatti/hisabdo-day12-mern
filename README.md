@@ -19,10 +19,11 @@ login/signup), improved navigation between modules, and reusable-state handling.
 4. [Folder Structure](#folder-structure)
 5. [Design System](#design-system)
 6. [Authentication (Protected Pages)](#authentication-protected-pages)
-7. [Responsive Layout](#responsive-layout)
-8. [Technology Stack](#technology-stack)
-9. [Setup & Run](#setup--run)
-10. [Submission Checklist](#submission-checklist)
+7. [Screenshots](#screenshots)
+8. [Responsive Layout](#responsive-layout)
+9. [Technology Stack](#technology-stack)
+10. [Setup & Run](#setup--run)
+11. [Submission Checklist](#submission-checklist)
 
 ---
 
@@ -236,6 +237,37 @@ shadows/radii (see `tailwind.config.ts`).
   mobile menu button; content grids collapse from 4 → 2 → 1 columns.
 - All pages use fluid grids, `sm:`/`md:`/`lg:`/`xl:` breakpoints, and horizontally scrollable tables
   on narrow screens; module lists switch from a desktop table to mobile cards.
+
+---
+
+## Screenshots
+
+Screenshots were captured against a local dev server with Playwright (`npm run screenshot`).
+The authenticated app pages are shown signed in. All images live in [`screenshots/`](screenshots/).
+
+### Marketing & Auth
+| Login | Signup |
+|-------|--------|
+| ![Login](screenshots/login.png) | ![Signup](screenshots/signup.png) |
+
+### App — Core Modules (responsive)
+| Dashboard (desktop) | Dashboard (mobile) | Customers |
+|---|---|---|
+| ![Dashboard](screenshots/dashboard.png) | ![Dashboard mobile](screenshots/dashboard-mobile.png) | ![Customers](screenshots/customers.png) |
+
+| Customer Khata | Transactions | **Reminders (Day 12)** |
+|---|---|---|
+| ![Customer Khata](screenshots/customer-khata.png) | ![Transactions](screenshots/transactions.png) | ![Reminders](screenshots/reminders.png) |
+
+### App — Reports & Settings
+| Reports | Settings |
+|---|---|
+| ![Reports](screenshots/reports.png) | ![Settings](screenshots/settings.png) |
+
+### Marketing pages
+| Home (desktop) | Home (mobile) | Pricing | Features |
+|---|---|---|---|
+| ![Home](screenshots/home-desktop.png) | ![Home mobile](screenshots/home-mobile.png) | ![Pricing](screenshots/pricing.png) | ![Features](screenshots/features.png) |
 
 ---
 
